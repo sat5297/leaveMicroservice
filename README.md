@@ -6,4 +6,5 @@ It includes the following functionalities:
   <li>The employee can apply leave.</li>
   <li>The employee can view leaves.</li>
   <li>The manager can reject/approve leave.</li>
+  <li>The manager can view Leave Requests of employees under him.</li>
   </ul>
