@@ -5,6 +5,7 @@ const LeaveModel = require('../models/leave');
 const mongoose = require('mongoose');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const req = require('express/lib/request');
+const { resolve, reject } = require('promise');
 
 const client = new MongoClient(process.env.DATABASE_URL, {
     useNewUrlParser: true, useUnifiedTopology: true 
@@ -15,7 +16,7 @@ const applyLeave = async(body) => {
     console.log(body, "leave Repo", leave);
     return new Promise((resolve,reject) => {
         client.connect(async err => {
-            const leaveCollection = client.db("employee").collection("leaves");
+            const leaveCollection = client.db("leaves").collection("leaves");
             try{
                 await leaveCollection.insertOne(leave).then((res) => {
                     console.log(res);
@@ -57,7 +58,7 @@ const approveLeave = async(body) => {
     console.log(searchOptions, leaveObj);
     return new Promise((resolve,reject) => {
         client.connect(async err => {
-            const leaveCollection = client.db("employee").collection("leaves");
+            const leaveCollection = client.db("leaves").collection("leaves");
             try{
                     await leaveCollection.findOneAndUpdate(searchOptions, {$set : {status : body.status}} , {new: true, upsert: true}).then((res) => {
                         resolve("Updated Status Successfully");
@@ -79,7 +80,7 @@ const leaveRequest = async (body) => {
     }
     return new Promise((resolve,reject) => {
         client.connect(async err => {
-            const leaveCollection = client.db("employee").collection("leaves");
+            const leaveCollection = client.db("leaves").collection("leaves");
             try{
                     const request = await leaveCollection.find(searchOptions).toArray();
                     console.log(request);
@@ -88,12 +89,43 @@ const leaveRequest = async (body) => {
             catch{
                     reject("Error in promise")
             }
-        })
+        });
+    });
+};
+
+const deleteEmployeeLeaves = async (body) => {
+    const searchOptions = {};
+    if(body.empID != null && body.empID !== ""){
+        searchOptions.empID = body.empID;
+    }
+    console.log(body,searchOptions);
+    return new Promise((resolve,reject) => {
+        client.connect(async err => {
+            const leaveCollection = client.db("leaves").collection("leaves");
+            try{
+                await leaveCollection.deleteMany(searchOptions).then((res) => {
+                    console.log(res);
+                    if(res.acknowledged){
+                        if(res.deletedCount > 0){
+                            resolve("Deleted Employee Leaves from Leave Database.");
+                        }else{
+                            resolve("No such Employee in Leave Database.");
+                        }
+                    }else{
+                        reject("Unable to deleted Employee Leaves from Leave Database.");
+                    }
+                });
+            }
+            catch{
+                reject("Error in Promise");
+            }
+        });
     });
 };
 
 module.exports = {
     applyLeave,
     approveLeave,
-    leaveRequest
+    leaveRequest,
+    deleteEmployeeLeaves
 };

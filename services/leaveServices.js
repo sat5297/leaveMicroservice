@@ -13,10 +13,16 @@ const approveLeave = (body) => {
 const leaveRequest = (body) => {
     let leaveRequest = leaveRepository.leaveRequest(body);
     return leaveRequest;
-}
+};
+
+const deleteEmployeeLeaves = (body) => {
+    let deleteLeave = leaveRepository.deleteEmployeeLeaves(body);
+    return deleteLeave; 
+};
 
 module.exports = {
     applyLeave,
     approveLeave,
-    leaveRequest
+    leaveRequest,
+    deleteEmployeeLeaves
 };

@@ -12,12 +12,17 @@ const approveLeave = async (req,res) => {
 
 const leaveRequest = async (req,res) => {
     const leaveRequest = await leaveService.leaveRequest(req.body);
-    //console.log(leaveRequest);
     res.send(leaveRequest);
-}
+};
+
+const deleteEmployeeLeaves = async (req,res) => {
+    const deleteLeave = await leaveService.deleteEmployeeLeaves(req.body);
+    res.send(deleteLeave);
+};
 
 module.exports = {
     applyLeave,
     approveLeave,
-    leaveRequest
+    leaveRequest,
+    deleteEmployeeLeaves
 };

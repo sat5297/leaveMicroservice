@@ -11,4 +11,6 @@ router.route('/approve')
 router.route('/request')
         .post(leaveController.leaveRequest)
 
+router.route('/delete')
+        .post(leaveController.deleteEmployeeLeaves)
 module.exports = router;
