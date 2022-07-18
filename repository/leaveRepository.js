@@ -98,11 +98,13 @@ const deleteEmployeeLeaves = async (body) => {
     if(body.empID != null && body.empID !== ""){
         searchOptions.empID = body.empID;
     }
+    const leave = new LeaveModel(body);
     console.log(body,searchOptions);
     return new Promise((resolve,reject) => {
         client.connect(async err => {
             const leaveCollection = client.db("leaves").collection("leaves");
             try{
+                await updateManager(leave);
                 await leaveCollection.deleteMany(searchOptions).then((res) => {
                     console.log(res);
                     if(res.acknowledged){
@@ -115,6 +117,28 @@ const deleteEmployeeLeaves = async (body) => {
                         reject("Unable to deleted Employee Leaves from Leave Database.");
                     }
                 });
+            }
+            catch{
+                reject("Error in Promise");
+            }
+        });
+    });
+};
+
+const updateManager = async (payroll) => {
+    let searchOptions = {};
+    if(payroll.empID != null && payroll.empID !== ""){
+        searchOptions.empManagerID = payroll.empID;
+    }
+    return new Promise((resolve,reject) => {
+        client.connect(async err => {
+            const leaveCollection = client.db("leaves").collection("leaves");
+            try{
+                await leaveCollection.updateMany(searchOptions, 
+                    {$set : {empManagerID : payroll.empManagerID, empManager : payroll.empManager }}).then((res) => {
+                        console.log(res);
+                        resolve("Updated the Manager in Payroll Database");
+                })
             }
             catch{
                 reject("Error in Promise");
