@@ -10,7 +10,10 @@ router.route('/approve')
 
 router.route('/request')
         .post(leaveController.leaveRequest)
+        .get(leaveController.leaveRequest)
 
 router.route('/delete')
         .post(leaveController.deleteEmployeeLeaves)
+        .delete(leaveController.deleteEmployeeLeaves)
+
 module.exports = router;
