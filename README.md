@@ -9,7 +9,7 @@ It includes the following functionalities:
   <li>The manager can view Leave Requests of employees under him.</li>
   </ul>
 
-<a href="https://documenter.getpostman.com/view/10075006/UzQyq3kJ" > <h2> API Documentation </h2> </a>
+<h2> <a href="https://documenter.getpostman.com/view/10075006/UzQyq3kJ" > API Documentation </a> </h2> 
   
 # Apply Leave
   <img src = "https://github.com/sat5297/leaveMicroservice/blob/master/ApplyLeaveActivity.jpeg" alt = "Apply Leave Activity" />
